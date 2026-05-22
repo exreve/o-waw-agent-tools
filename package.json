@@ -38,11 +38,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/serafeim/o-waw-agent-tools.git"
+    "url": "https://github.com/exreve/o-waw-agent-tools.git"
   },
   "homepage": "https://o-waw.com",
   "bugs": {
-    "url": "https://github.com/serafeim/o-waw-agent-tools/issues"
+    "url": "https://github.com/exreve/o-waw-agent-tools/issues"
   },
   "license": "MIT",
   "devDependencies": {
