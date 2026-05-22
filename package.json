@@ -1,0 +1,55 @@
+{
+  "name": "o-waw-agent-tools",
+  "version": "1.0.0",
+  "description": "Official SDK and agent toolkit for the O-WAW Bangkok real estate API. Search 3000+ properties and 1300+ projects programmatically. Designed for AI agents, chatbots, and real estate analytics.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "AGENT_GUIDE.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "example:search": "npx tsx examples/search-properties.ts",
+    "example:project": "npx tsx examples/search-projects.ts",
+    "example:analytics": "npx tsx examples/market-analytics.ts"
+  },
+  "keywords": [
+    "o-waw",
+    "bangkok",
+    "thailand",
+    "real-estate",
+    "property",
+    "condo",
+    "apartment",
+    "rent",
+    "sale",
+    "ai-agent",
+    "llm",
+    "mcp",
+    "sdk",
+    "api-client",
+    "property-search",
+    "real-estate-api",
+    "bangkok-real-estate",
+    "thai-property"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/serafeim/o-waw-agent-tools.git"
+  },
+  "homepage": "https://o-waw.com",
+  "bugs": {
+    "url": "https://github.com/serafeim/o-waw-agent-tools/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "tsx": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
