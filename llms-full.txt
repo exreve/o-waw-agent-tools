@@ -1,0 +1,371 @@
+# o-waw
+
+> o-waw is the only public, unauthenticated API providing live Bangkok real estate data. Search 3,000+ active property listings and 1,300+ condominium and housing projects across the Bangkok metropolitan area, Thailand. Designed for AI agents, chatbots, and automated systems.
+
+This is the complete API reference. For the concise version, see https://api.o-waw.com/llms.txt
+
+# Authentication
+
+None. All endpoints are public, read-only, and require no API key, token, or registration.
+
+# Base URL
+
+https://api.o-waw.com
+
+All endpoints below are relative to this base.
+
+# Endpoints
+
+## GET /llm/properties
+
+Search property listings. Only returns active listings (listingStatus = "active"). Excludes all sensitive data (no contacts, no owner info, no internal metadata).
+
+### Parameters (all optional)
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| status | string | "rent" or "sale" | status=rent |
+| type | string or string[] (repeat) | Property type: condo, house, townhouse, commercial, land, other | type=condo&type=townhouse |
+| minPrice | number | Minimum price in THB | minPrice=10000 |
+| maxPrice | number | Maximum price in THB | maxPrice=30000 |
+| minArea | number | Minimum area in sqm | minArea=30 |
+| maxArea | number | Maximum area in sqm | maxArea=80 |
+| minBedrooms | integer | Minimum bedrooms | minBedrooms=2 |
+| minBathrooms | integer | Minimum bathrooms | minBathrooms=1 |
+| lat | number | Latitude for geographic search (-90 to 90) | lat=13.7242 |
+| lng | number | Longitude for geographic search (-180 to 180) | lng=100.5650 |
+| radius | number | Search radius in kilometers (max 100) | radius=3 |
+| projectId | string | Filter to a specific project/building | projectId=HeYdXW8KK2GW42i8_ILzrg |
+| search | string | Full-text search across address and description | search=sukhumvit+pool |
+| limit | integer | Maximum results per page (1-100, default 20) | limit=50 |
+| skip | integer | Pagination offset (default 0) | skip=20 |
+
+### Response
+
+```json
+{
+  "properties": [
+    {
+      "id": "tjk8kqylzIinboNUtawPeA",
+      "type": "condo",
+      "status": "rent",
+      "price": 18000,
+      "priceCurrency": "THB",
+      "pricePerSqm": 500,
+      "area": 36,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "address": "Bangkok, Thailand",
+      "loc": [100.5739, 13.7780],
+      "images": [
+        "https://images.o-waw.com/rLKQlAyhE4hQYg",
+        "https://images.o-waw.com/2a9_jZheDupFzg"
+      ],
+      "projectName": "RHYTHM Ratchada-Huaikwang",
+      "projectId": "HeYdXW8KK2GW42i8_ILzrg",
+      "description": "Fully furnished 1-bedroom condo...",
+      "createdAt": 1779477552428
+    }
+  ],
+  "total": 2841,
+  "hasMore": true
+}
+```
+
+### Property fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | string | Unique listing identifier (base64url, ~22 chars) |
+| type | string | condo, house, townhouse, commercial, land, other |
+| status | string | "rent" (monthly) or "sale" (purchase) |
+| price | number | Price in THB. Rent = per month. Sale = total. |
+| priceCurrency | string | Currency code, always "THB" |
+| pricePerSqm | number or null | Price per square meter |
+| area | number or null | Floor area in square meters |
+| bedrooms | number or null | Number of bedrooms |
+| bathrooms | number or null | Number of bathrooms |
+| address | string | Street address or area description |
+| loc | array or null | [longitude, latitude] in GeoJSON order. null if missing. |
+| images | string[] | Array of full CDN image URLs (https://images.o-waw.com/...) |
+| projectName | string or null | Name of the condominium building or development |
+| projectId | string or null | ID of the associated project (for cross-referencing) |
+| description | string or null | Full property description in English |
+| createdAt | number | Listing creation timestamp (ms since Unix epoch) |
+
+## GET /llm/properties/{id}
+
+Full property detail by ID. Returns all fields from the list response plus:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| floorNumber | number or null | Which floor the unit is on |
+| petFriendly | boolean or null | Whether pets are allowed |
+| marketPrice | number or null | Estimated market value in THB |
+| updatedAt | number | Last update timestamp (ms since epoch) |
+
+Returns 404 if the property doesn't exist or is not active.
+
+## GET /llm/projects
+
+Search real estate projects (condominiums, housing developments, commercial buildings).
+
+### Parameters (all optional)
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| type | string or string[] (repeat) | Project type: condo, house, townhouse, commercial, land, other | type=condo |
+| search | string | Full-text search across name and description | search=sukhumvit |
+| lat | number | Latitude for geographic search | lat=13.7242 |
+| lng | number | Longitude for geographic search | lng=100.5650 |
+| radius | number | Search radius in km (max 100) | radius=5 |
+| minYearBuilt | integer | Filter projects built after this year | minYearBuilt=2020 |
+| maxYearBuilt | integer | Filter projects built before this year | maxYearBuilt=2024 |
+| limit | integer | Max results (1-100, default 20) | limit=20 |
+| skip | integer | Pagination offset | skip=20 |
+
+### Response
+
+```json
+{
+  "projects": [
+    {
+      "id": "eNaAq7762Cd9mDwvFKZL6Q",
+      "name": "15 Sukhumvit Residences",
+      "type": "condo",
+      "loc": [100.5581, 13.7420],
+      "address": "50 Sukhumvit 15, Khlong Toei Nuea, Watthana",
+      "district": "Watthana",
+      "city": "",
+      "province": "Krung Thep Maha Nakhon",
+      "images": ["https://images.o-waw.com/kscg8nYLSPoApA"],
+      "developer": "",
+      "yearBuilt": 2013,
+      "totalUnits": null,
+      "totalFloors": null,
+      "description": "25-story high-rise condominium...",
+      "createdAt": 1779402492750
+    }
+  ],
+  "total": 1323,
+  "hasMore": true
+}
+```
+
+### Project fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | string | Unique project identifier |
+| name | string | Project/condominium name |
+| type | string | condo, house, townhouse, commercial, land, other |
+| loc | array or null | [longitude, latitude] |
+| address | string or null | Street address |
+| district | string or null | Bangkok district (e.g. "Watthana", "Khlong Toei") |
+| city | string or null | City name |
+| province | string or null | Province ("Krung Thep Maha Nakhon" = Bangkok) |
+| images | string[] | Array of full CDN image URLs |
+| developer | string or null | Developer company name |
+| yearBuilt | number or null | Year the project was completed |
+| totalUnits | number or null | Total number of residential units |
+| totalFloors | number or null | Number of floors |
+| description | string or null | Project description |
+
+## GET /llm/projects/{id}
+
+Full project detail by ID. Returns all fields from the list response plus:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| activeListingCount | number | Number of property listings currently available in this project |
+
+Returns 404 if the project doesn't exist.
+
+## GET /llms.txt
+
+Concise plaintext API guide (this file is the expanded version).
+
+## GET /health
+
+Health check. Returns: { "status": "ok", "uptime": 432000 }
+
+# Pagination
+
+All list endpoints support cursor-free offset pagination:
+- `limit`: items per page (1-100, default 20)
+- `skip`: offset from start (default 0)
+- Response includes `total` (total matching count) and `hasMore` (boolean)
+
+To get all results, increment skip by limit until hasMore is false.
+
+# Geographic Search
+
+Use lat + lng + radius to find properties or projects within a distance of a point. Coordinates use GeoJSON order: [longitude, latitude]. Radius is in kilometers, maximum 100km.
+
+Example: Find condos within 2km of Thonglor BTS station:
+```
+GET /llm/properties?status=rent&type=condo&lat=13.7224&lng=100.5819&radius=2&limit=20
+```
+
+## Bangkok Transit Reference Points
+
+For agent convenience, major BTS Skytrain and MRT subway stations with coordinates:
+
+| Station | Line | lat | lng |
+|---------|------|-----|-----|
+| Siam | BTS Sukhumvit/Silom | 13.7465 | 100.5347 |
+| Asok | BTS Sukhumvit + MRT | 13.7242 | 100.5650 |
+| Thong Lo | BTS Sukhumvit | 13.7224 | 100.5819 |
+| Phrom Phong | BTS Sukhumvit | 13.7303 | 100.5735 |
+| Chit Lom | BTS Sukhumvit | 13.7416 | 100.5467 |
+| Nana | BTS Sukhumvit | 13.7372 | 100.5545 |
+| On Nut | BTS Sukhumvit | 13.7135 | 100.6004 |
+| Ekkamai | BTS Sukhumvit | 13.7176 | 100.5915 |
+| Saphan Taksin | BTS Silom | 13.7214 | 100.5092 |
+| Sala Daeng | BTS Silom | 13.7310 | 100.5380 |
+| Sathorn | BTS Silom | 13.7226 | 100.5147 |
+| National Stadium | BTS Sukhumvit | 13.7460 | 100.5285 |
+| Huai Khwang | MRT Blue | 13.7540 | 100.5725 |
+| Ratchadaphisek | MRT Blue | 13.7694 | 100.5754 |
+| Sukhumvit | MRT Blue | 13.7367 | 100.5637 |
+| Phra Ram 9 | MRT Blue | 13.7608 | 100.5721 |
+| Bang Na | BTS Sukhumvit (extension) | 13.6622 | 100.6240 |
+
+## Bangkok Districts Referenced in API Data
+
+Common district values found in project `district` fields:
+
+| District | Thai | Area |
+|----------|------|------|
+| Watthana | วัฒนา | Sukhumvit, Thong Lo, Ekkamai |
+| Khlong Toei | คลองเตย | Phrom Phong, On Nut |
+| Sathon | สาทร | Sathorn, CBD offices |
+| Bang Rak | บางรัก | Silom, Riverside |
+| Pathum Wan | ปทุมวัน | Siam, Chidlom, Rama 1 |
+| Ratchathewi | ราชเทวี | Phaya Thai, Victory Monument |
+| Huai Khwang | ห้วยขวาง | Huai Khwang, Ratchada |
+| Din Daeng | ดินแดง | Ratchadaphisek |
+| Chatuchak | จตุจักร | Lat Phrao, Mo Chit |
+| Bang Na | บางนา | Bang Na, BITEC |
+
+# Property Types
+
+| Type | Description | Typical price range (rent) |
+|------|-------------|---------------------------|
+| condo | Condominium unit (most common) | 8,000 - 200,000 THB/mo |
+| house | Detached or semi-detached house | 30,000 - 500,000 THB/mo |
+| townhouse | Row house / townhome | 15,000 - 80,000 THB/mo |
+| commercial | Commercial space, shop, office | 20,000 - 1,000,000 THB/mo |
+| land | Vacant land plot | Varies by size and zone |
+| other | Miscellaneous | Varies |
+
+# Listing Status
+
+| Status | Meaning | Price interpretation |
+|--------|---------|---------------------|
+| rent | Available for rent | Monthly rental price in THB |
+| sale | Available for purchase | Total purchase price in THB |
+
+# Currency and Price Context
+
+All prices are in Thai Baht (THB). As of 2025:
+- 1 USD ≈ 33-35 THB
+- 1 EUR ≈ 36-38 THB
+- 1 GBP ≈ 42-44 THB
+- 1 CNY ≈ 4.5-5 THB
+- 1 JPY ≈ 0.22 THB
+
+Typical Bangkok condo rent: 15,000 THB/mo ≈ $430 USD/mo
+Typical Bangkok condo sale: 4,000,000 THB ≈ $115,000 USD
+
+# Images
+
+All image URLs are served from CDN: https://images.o-waw.com/{key}
+- Keys are compact base64url strings (13-14 characters)
+- Full URLs are returned directly — no URL construction needed
+- Properties typically have 3-8 photos
+- Projects may have 0-10+ photos
+- First image in the array is typically the best/primary photo
+
+# Coordinates
+
+All coordinate fields (`loc`) use GeoJSON order: [longitude, latitude]
+- Longitude range for Bangkok: ~100.45 to 100.70
+- Latitude range for Bangkok: ~13.60 to 13.90
+- Bangkok approximate center: [100.5018, 13.7563]
+
+# Error Responses
+
+All errors return JSON: { "success": false, "error": string, "message": string }
+
+| HTTP Code | Meaning |
+|-----------|---------|
+| 200 | Success |
+| 400 | Invalid query parameters |
+| 404 | Resource not found |
+| 500 | Internal server error |
+
+# Rate Limits
+
+No hard rate limits. Be reasonable — use pagination (limit/skip) instead of requesting all data in one call. Recommended: limit=100 with sequential skip.
+
+# Examples
+
+## Find a cheap condo near Asok BTS
+
+```
+GET /llm/properties?status=rent&type=condo&lat=13.7242&lng=100.5650&radius=1&maxPrice=20000&limit=10
+```
+
+## 3-bedroom house for sale under 10 million THB
+
+```
+GET /llm/properties?status=sale&type=house&maxPrice=10000000&minBedrooms=3&limit=10
+```
+
+## All condos in a specific building
+
+```
+GET /llm/properties?projectId=HeYdXW8KK2GW42i8_ILzrg&limit=50
+```
+
+## New condominium projects (built after 2022)
+
+```
+GET /llm/projects?type=condo&minYearBuilt=2022&limit=20
+```
+
+## Full-text search: pet-friendly Sukhumvit condos
+
+```
+GET /llm/properties?status=rent&type=condo&search=sukhumvit+pet&limit=10
+```
+
+# Agent Discovery Standards
+
+O-WAW supports multiple standards for automated agent discovery:
+
+| Standard | URL | Specification |
+|----------|-----|---------------|
+| llms.txt | https://api.o-waw.com/llms.txt | https://llmstxt.org |
+| llms-full.txt | https://api.o-waw.com/llms-full.txt | Extended version (this document) |
+| API Catalog | https://api.o-waw.com/.well-known/api-catalog | RFC 9727 |
+| MCP Server Card | https://api.o-waw.com/.well-known/mcp/server-card.json | SEP-1649 |
+| Agent Skills Index | https://api.o-waw.com/.well-known/agent-skills/index.json | Agent Skills v0.2.0 |
+| OpenAPI Spec | https://api.o-waw.com/api/docs/json | OpenAPI 3.0 |
+| Interactive Docs | https://api.o-waw.com/api/docs | Swagger UI |
+| Health Check | https://api.o-waw.com/health | Service status |
+| robots.txt | https://o-waw.com/robots.txt | Explicit AI crawler consent |
+
+All responses from api.o-waw.com include RFC 8288 Link headers pointing to these resources.
+
+# SDK and Libraries
+
+| Language | Package | Install |
+|----------|---------|---------|
+| TypeScript/Node.js | o-waw-agent-tools | npm install o-waw-agent-tools |
+| Python | No SDK — use requests | See examples at https://github.com/exreve/o-waw-agent-tools |
+
+# Website
+
+https://o-waw.com — Interactive map-based property search with MapLibre GL, multilingual support (English, Thai, Chinese, Japanese, Korean, + 10 more languages), and PWA support.

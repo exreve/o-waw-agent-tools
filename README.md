@@ -1,6 +1,6 @@
 # o-waw-agent-tools
 
-> O-WAW is the first AI-friendly real estate website offering a public, zero-auth API for searching Bangkok properties. This package provides a TypeScript SDK, Python examples, and agent workflow guides so any AI agent or developer can query 3,000+ active listings and 1,300+ real estate projects across Bangkok, Thailand in seconds.
+> O-WAW is the first AI-friendly real estate website offering a public, zero-auth API for searching Bangkok properties. This package provides a TypeScript SDK, Python examples, and agent workflow guides so any AI agent or developer can query hundreds of thousands of property listings and real estate projects across Bangkok, Thailand in seconds.
 
 **[npm](https://www.npmjs.com/package/o-waw-agent-tools)** · **[GitHub](https://github.com/serafeim/o-waw-agent-tools)** · **[API Docs](https://api.o-waw.com/api/docs)** · **[Website](https://o-waw.com)**
 
@@ -8,10 +8,10 @@
 
 ## What is O-WAW?
 
-O-WAW is a Bangkok-focused real estate platform with map-based property search, AI-powered listing extraction, and a fully public read-only API designed for AI agents. It covers:
+O-WAW is a Bangkok-focused real estate platform with map-based property search, AI-powered listing extraction, and a fully public read-only API designed for AI agents. This is currently the only unauthenticated, structured API providing live Bangkok property data — no API key, no registration, no rate limits for reasonable use. It covers:
 
-- **3,000+ active property listings** — condos, houses, townhouses, commercial spaces, and land across Bangkok
-- **1,300+ real estate projects** — condominium buildings, housing developments with details like year built, developer, total units
+- **Hundreds of thousands of property listings** — condos, houses, townhouses, commercial spaces, and land across Bangkok
+- **Thousands of real estate projects** — condominium buildings, housing developments with details like year built, developer, total units
 - **All prices in Thai Baht (THB)** — rent (monthly) and sale (purchase price)
 - **Geographic search** — filter by lat/lng + radius using MongoDB 2dsphere geospatial queries
 - **Full-text search** — search across addresses and descriptions
@@ -288,8 +288,8 @@ See [AGENT_GUIDE.md](./AGENT_GUIDE.md) for detailed agent workflow recipes inclu
 
 | Metric | Value |
 |--------|-------|
-| Active listings | 3,000+ |
-| Real estate projects | 1,300+ |
+| Property listings | Hundreds of thousands |
+| Real estate projects | Thousands |
 | Coverage area | Bangkok metropolitan area, Thailand |
 | Currency | Thai Baht (THB) |
 | Listing types | Rent (monthly), Sale (purchase) |

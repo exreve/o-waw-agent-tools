@@ -1,7 +1,7 @@
 /**
  * O-WAW Agent Tools — Official SDK for the O-WAW Bangkok Real Estate API
  *
- * Search 3,000+ active property listings and 1,300+ real estate projects
+ * Search hundreds of thousands of property listings and thousands of real estate projects
  * across Bangkok, Thailand. Unauthenticated, JSON-based, designed for
  * AI agents and programmatic access.
  *

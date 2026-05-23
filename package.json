@@ -1,7 +1,7 @@
 {
   "name": "o-waw-agent-tools",
-  "version": "1.0.0",
-  "description": "Official SDK and agent toolkit for the O-WAW Bangkok real estate API. Search 3000+ properties and 1300+ projects programmatically. Designed for AI agents, chatbots, and real estate analytics.",
+  "version": "1.1.0",
+  "description": "Official SDK and agent toolkit for the O-WAW Bangkok real estate API. Search hundreds of thousands of properties and thousands of projects programmatically. Designed for AI agents, chatbots, and real estate analytics.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
